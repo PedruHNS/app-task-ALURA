@@ -1,0 +1,7 @@
+import 'package:app_task_alura/material_app.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
