@@ -9,22 +9,21 @@ class TaskCard extends StatefulWidget {
   final int dificuldade;
   final String urlImagem;
 
-  const TaskCard({
+  TaskCard({
     Key? key,
     required this.tarefa,
     required this.dificuldade,
     required this.urlImagem,
   }) : super(key: key);
-
+  int nivel = 0;
   @override
   State<TaskCard> createState() => _TaskCardState();
 }
 
 class _TaskCardState extends State<TaskCard> {
-  int nivel = 0;
   void incrementar() {
     setState(() {
-      nivel++;
+      widget.nivel++;
     });
   }
 
@@ -67,9 +66,9 @@ class _TaskCardState extends State<TaskCard> {
                     DificuldadeTask(dificuldade: widget.dificuldade),
                     ProgressNivel(
                       dificuldade: widget.dificuldade,
-                      nivel: nivel,
+                      nivel: widget.nivel,
                     ),
-                    Text("nivel: $nivel"),
+                    Text("nivel: ${widget.nivel}"),
                   ],
                 ),
               ),

@@ -1,6 +1,7 @@
+import 'package:app_task_alura/data/task_inherited.dart';
 import 'package:flutter/material.dart';
 
-import 'components/card_task.dart';
+
 
 class HomeTaskPage extends StatelessWidget {
   const HomeTaskPage({super.key});
@@ -13,15 +14,7 @@ class HomeTaskPage extends StatelessWidget {
         leading: Container(),
         title: const Text("App Task"),
       ),
-      body: ListView(
-        children: const [
-          TaskCard(
-              tarefa: "flutter",
-              dificuldade: 1,
-              urlImagem:
-                  "https://pbs.twimg.com/media/FKNlhKZUcAEd7FY?format=jpg&name=4096x4096"),
-        ],
-      ),
+      body: ListView(children: TaskInherited.of(context).taskList),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).pushNamed("/addTask"),
         child: const Icon(Icons.add_task_sharp),
