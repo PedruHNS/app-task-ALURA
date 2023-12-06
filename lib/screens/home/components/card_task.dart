@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
+import 'package:app_task_alura/screens/home/components/dialog_delete.dart';
 import 'package:app_task_alura/shared/image_task.dart';
 import 'package:app_task_alura/screens/home/components/star.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +17,8 @@ class TaskCard extends StatefulWidget {
     required this.dificuldade,
     required this.urlImagem,
   }) : super(key: key);
-  int nivel = 0;
+
+  var _nivel = 0;
   @override
   State<TaskCard> createState() => _TaskCardState();
 }
@@ -23,7 +26,7 @@ class TaskCard extends StatefulWidget {
 class _TaskCardState extends State<TaskCard> {
   void incrementar() {
     setState(() {
-      widget.nivel++;
+      widget._nivel++;
     });
   }
 
@@ -66,9 +69,9 @@ class _TaskCardState extends State<TaskCard> {
                     DificuldadeTask(dificuldade: widget.dificuldade),
                     ProgressNivel(
                       dificuldade: widget.dificuldade,
-                      nivel: widget.nivel,
+                      nivel: widget._nivel,
                     ),
-                    Text("nivel: ${widget.nivel}"),
+                    Text("nivel: ${widget._nivel}"),
                   ],
                 ),
               ),
@@ -76,6 +79,12 @@ class _TaskCardState extends State<TaskCard> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
+                onLongPress: () => showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (_) => DialogDelete(
+                          nome: widget.tarefa,
+                        )),
                 onPressed: incrementar,
                 child: const Icon(Icons.arrow_drop_up_outlined),
               ),

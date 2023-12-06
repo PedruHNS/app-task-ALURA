@@ -1,4 +1,6 @@
-import 'package:app_task_alura/data/task_inherited.dart';
+import 'package:app_task_alura/data/task_dao.dart';
+
+import 'package:app_task_alura/screens/home/components/card_task.dart';
 import 'package:app_task_alura/shared/image_task.dart';
 import 'package:flutter/material.dart';
 
@@ -20,11 +22,11 @@ class _AddPageState extends State<AddPage> {
 
   void validacaoForm() {
     if (_formKey.currentState!.validate()) {
-      TaskInherited.of(context).addTask(
-        tarefa: tarefaController.text,
-        dificuldade: int.parse(dificuldadeController.text),
-        urlImagem: imagemController.text,
-      );
+      TaskDao().save(TaskCard(
+          tarefa: tarefaController.text,
+          dificuldade: int.parse(dificuldadeController.text),
+          urlImagem: imagemController.text));
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("adicionado"),

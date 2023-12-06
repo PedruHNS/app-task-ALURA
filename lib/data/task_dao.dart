@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:app_task_alura/data/database.dart';
 import 'package:app_task_alura/screens/home/components/card_task.dart';
 
 class TaskDao {
@@ -14,11 +17,68 @@ class TaskDao {
       '$_difficulty INTEGER, '
       '$_image TEXT)';
 
-  void save(TaskCard tarefa) async {}
+  void save(TaskCard tarefa) async {
+    final bd = await getDatabase();
 
-  Future<List<TaskCard>> findAll() async {}
+    final itemExists = await find(tarefa.tarefa);
+    final taskMap = toMap(tarefa);
 
-  Future<TaskCard> find(String tarefa) async {}
+    if (itemExists.isEmpty) {
+      await bd.insert(_tablename, taskMap);
+    } else {
+      await bd.update(
+        _tablename,
+        taskMap,
+        where: '$_name = ?',
+        whereArgs: [tarefa.tarefa],
+      );
+    }
 
-  void delete(String tarefa) async {}
+    log('save executado com sucesso');
+  }
+
+  Future<List<TaskCard>> findAll() async {
+    final bd = await getDatabase();
+    final result = await bd.query(_tablename);
+    log('findAll executado com sucesso');
+    return toList(result);
+  }
+
+  Future<List<TaskCard>> find(String tarefa) async {
+    final bd = await getDatabase();
+    final result = await bd.query(
+      _tablename,
+      where: '$_name = ?',
+      whereArgs: [tarefa],
+    );
+
+    log('find executado com sucesso');
+    return toList(result);
+  }
+
+  void delete(String tarefa) async {
+    final bd = await getDatabase();
+    bd.delete(_tablename, where: '$_name = ?', whereArgs: [tarefa]);
+  }
+
+  List<TaskCard> toList(List<Map<String, dynamic>> mapDeTarefas) {
+    final tarefas = <TaskCard>[];
+    for (var linha in mapDeTarefas) {
+      final TaskCard tarefa = TaskCard(
+        tarefa: linha[_name],
+        dificuldade: linha[_difficulty],
+        urlImagem: linha[_image],
+      );
+      tarefas.add(tarefa);
+    }
+    return tarefas;
+  }
+
+  Map<String, dynamic> toMap(TaskCard tarefa) {
+    return {
+      _name: tarefa.tarefa,
+      _difficulty: tarefa.dificuldade,
+      _image: tarefa.urlImagem,
+    };
+  }
 }
